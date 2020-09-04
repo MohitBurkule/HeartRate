@@ -22,7 +22,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
   <script>
 var video, width, height, context, graphCanvas, graphContext, bpm;
 var hist = [];
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
 
 var constraints = {video: true, audio:false};
 
