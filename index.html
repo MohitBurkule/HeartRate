@@ -27,7 +27,7 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.mozGetUserMedia ||
                        navigator.msGetUserMedia);
 ////https://stackoverflow.com/a/28991938
-var constraints = {video: true, audio:false};
+var constraints = {video: true, audio:false,torch: true};
 
 function initialize() {
 navigator.mediaDevices.enumerateDevices().then(function(devices) {
