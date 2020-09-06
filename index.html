@@ -13,7 +13,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
   <body>
     <p>Allow this website to use your webcam, then place your finger lightly over the camera and wait for the trace to stabilise.</p>
     <p>You will have most success when there is light behind your finger.</p>
-    <video id="v" width="100" height="100"  muted></video><!--style="display:none"-->
+    <video id="v" width="100" height="100"  muted></video><!--style="display:none"  uncomment for hiding video -->
     <canvas id="c" width="100" height="100" style="display:none"></canvas>
     <canvas id="g" width="320" height="30"></canvas><br/>
     <div id="bpm">--</div>
@@ -71,7 +71,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
             track.applyConstraints({
          advanced: [{torch: true}]
       })
-        alert('Turning on flashlight');
+        alert('Turning on flashlight , if present ');
     }, 3000); 
     video.play();
     // Ready! Let's start drawing.
