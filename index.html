@@ -66,6 +66,13 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
 
   function startStream(stream) {
     video.srcObject = stream;
+    const track = stream.getVideoTracks()[0];
+    setTimeout(function(){ 
+            track.applyConstraints({
+         advanced: [{torch: true}]
+      })
+        alert('Turning on flashlight');
+    }, 3000); 
     video.play();
     // Ready! Let's start drawing.
     requestAnimationFrame(draw);
