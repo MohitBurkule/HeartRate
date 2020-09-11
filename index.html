@@ -43,6 +43,7 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
 var constraints = {video: true, audio:false};
 
 function initialize() {
+localStorage.setItem("heartData", "");
 navigator.mediaDevices.enumerateDevices().then(function(devices) {
   devices.forEach(function(device) {
     console.log(device.kind + ": " + device.label +
@@ -121,7 +122,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     }
     //console.log(sum / len);   
     hist.push({ bright : sum/len, time : Date.now() });
-    heartData.push({ bright : sum/len, time : Date.now() });
+    heartData.push((sum/len,Date.now()));
     // Check browser support
     if (typeof(Storage) !== "undefined") {
       // Store
