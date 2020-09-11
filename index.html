@@ -122,7 +122,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     }
     //console.log(sum / len);   
     hist.push({ bright : sum/len, time : Date.now() });
-    heartData.push((sum/len,Date.now()));
+    heartData.push([sum/len,Date.now()]);
     // Check browser support
     if (typeof(Storage) !== "undefined") {
       // Store
