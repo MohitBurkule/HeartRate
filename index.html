@@ -34,7 +34,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     }
 var video, width, height, context, graphCanvas, graphContext, bpm;
 var hist = [];
-var heartData=[];    
+var heartData={bright:[],time:[]};    
 navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
                        navigator.mozGetUserMedia ||
@@ -122,7 +122,8 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     }
     //console.log(sum / len);   
     hist.push({ bright : sum/len, time : Date.now() });
-    heartData.push([sum/len,Date.now()]);
+    heartData['bright'].push(sum/len);
+    heartData['time'].push(Date.now());
     // Check browser support
     if (typeof(Storage) !== "undefined") {
       // Store
