@@ -115,7 +115,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     // Check browser support
     if (typeof(Storage) !== "undefined") {
       // Store
-      localStorage.setItem("heartData", heartData);
+      localStorage.setItem("heartData", JSON.stringify(heartData));
       // Retrieve
       
     } else {
