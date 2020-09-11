@@ -24,6 +24,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
   <script>
 var video, width, height, context, graphCanvas, graphContext, bpm;
 var hist = [];
+var heartData=[];    
 navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
                        navigator.mozGetUserMedia ||
@@ -110,6 +111,16 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     }
     //console.log(sum / len);   
     hist.push({ bright : sum/len, time : Date.now() });
+    heartData.push({ bright : sum/len, time : Date.now() });
+    // Check browser support
+    if (typeof(Storage) !== "undefined") {
+      // Store
+      localStorage.setItem("heartData", heartData);
+      // Retrieve
+      
+    } else {
+      document.alert("Sorry, your browser does not support Web Storage...Hence our site may not work");
+    }
     while (hist.length>graphCanvas.width) hist.shift();
     // max and min
     var max = hist[0].bright;
