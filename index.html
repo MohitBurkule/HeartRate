@@ -36,7 +36,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <p> Please maintain a calm posture and <b>do not move</b></p>
     
   <script>
-    started=false;
+    var started=false;
     function submitData(){
 	if(started)
 		{document.getElementById("hdata").value=localStorage.getItem("heartData");
@@ -95,6 +95,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
   }
 
   function startStream(stream) {
+	started=true;
 	document.getElementById("btnsubmit").value="Submit";
     video.srcObject = stream;
     track = stream.getVideoTracks()[0];
