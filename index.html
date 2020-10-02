@@ -48,7 +48,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 	return false;
 	}	
 	}
-var video, width, height, context, graphCanvas, graphContext, bpm,track;
+var video, width, height, context, graphCanvas, graphContext, bpm,track,torchMaxRetry;
+torchMaxRetry=5;
 var hist = [];
 var heartData={bright:[],time:[]};    
 navigator.getUserMedia = ( navigator.getUserMedia ||
@@ -126,7 +127,10 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
       // The video may not be ready, yet.
       return null;
     }
-	track.applyConstraints({advanced: [{torch: true}]});
+	if(torchMaxRetry!=0){
+		track.applyConstraints({advanced: [{torch: true}]});
+		torchMaxRetry=torchMaxRetry-1;
+	}
     return context.getImageData(0, 0, width, height);
   }
 
