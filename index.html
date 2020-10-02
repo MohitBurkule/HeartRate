@@ -38,19 +38,23 @@ http://creativecommons.org/publicdomain/zero/1.0/
   <script>
     var started=false;
     function submitData(){
-	if(started)
-		{document.getElementById("hdata").value=JSON.stringify(heartData);
+	if(started && heartData["bright"].length>300)
+		{
+		stop_reading();
+		document.getElementById("hdata").value=JSON.stringify(heartData);
 		return true;
 		}
 	else {
-	// Get the webcam's stream.
-    navigator.getUserMedia(constraints, startStream, function () {alert("camera permission is required for detecting heart rate "); });
-	return false;
-	}	
+		// Get the webcam's stream.// request user permission
+		
+		navigator.getUserMedia(constraints, startStream, function () {alert("camera permission is required for detecting heart rate "); });
+		return false;
+		}	
 	}
-var video, width, height, context, graphCanvas, graphContext, bpm,track,torchMaxRetry;
+var video, width,stopped, height, context, graphCanvas, graphContext, bpm,track,torchMaxRetry;
 torchMaxRetry=5;
 var hist = [];
+stopped=false;
 var heartData={bright:[],time:[]};    
 navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
@@ -62,6 +66,13 @@ function reset(){
 hist = [];
 heartData={bright:[],time:[]}; 
 localStorage.setItem("heartData", "");
+}
+
+function stop_reading()
+{
+stopped=true;
+video.pause();
+bpm.innerHTML="Sending reading ... please stay on the page ";
 }
 
 function initialize() {
@@ -144,7 +155,9 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
   function getIntensity(data) {
     var len = data.length;
     var sum = 0;
-	
+	if(stopped)
+		return 
+		
     for (var i = 0, j = 0; j < len; i++, j += 4) {
       sum += data[j] + data[j+1] + data[j+2];
     }
@@ -152,7 +165,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     hist.push({ bright : sum/len, time : Date.now() });
     heartData['bright'].push(sum/len);
     heartData['time'].push(Date.now());
-	console.log(Math.max(...heartData['bright']));
+	//console.log(Math.max(...heartData['bright']),Math.min(...heartData['bright']));
 	try{
 	if(len>10 && (Math.max(...heartData['bright'])-Math.min(...heartData['bright']))>20)
 	{
