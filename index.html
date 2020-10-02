@@ -99,14 +99,14 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     video.srcObject = stream;
     track = stream.getVideoTracks()[0];
 	video.play();
-    /*
+    
 	setTimeout(function(){ 
             track.applyConstraints({
          advanced: [{torch: true}]
       })
         //alert('Turning on flashlight , if present ');
-    }, 30000); 
-    */
+    }, 800); 
+    
     // Ready! Let's start drawing.
     requestAnimationFrame(draw);
   }
