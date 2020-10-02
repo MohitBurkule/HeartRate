@@ -33,6 +33,11 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
       <input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
       <input type="submit" id="btnsubmit" value="Start">
+	<br>Set Measurement timer for <br>  
+	 1 <input type="radio" checked onclick="set_maxminutes(1);" name="timer" value="1">
+	 3 <input type="radio" onclick="set_maxminutes(3);" name="timer" value="3">
+	 5 <input type="radio" onclick="set_maxminutes(5);" name="timer" value="5">
+	    
     </form> 
     <p> Please maintain a calm posture and <b>do not move</b></p>
     
@@ -41,6 +46,10 @@ http://creativecommons.org/publicdomain/zero/1.0/
 	var timer=null;
 	var maxminutes=1
 	var maxtimer=maxminutes*60000
+	function set_maxminutes(x){
+		maxminutes=x;
+		maxtimer=maxminutes*60000
+	}
     function submitData(){
 	if(started && heartData["bright"].length>300)
 		{
