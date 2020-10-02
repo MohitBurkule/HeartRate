@@ -28,7 +28,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <canvas id="c" width="100" height="100" style="display:none"></canvas>
     <canvas id="g" width="320" height="30"></canvas><br/>
     <div id="bpm">--</div>
-    <form action="http://vedicheart.pythonanywhere.com/"  onsubmit="return submitData()" method="post">
+	<div id="time_left">--</div>
+    <form id="mainform" action="http://vedicheart.pythonanywhere.com/"  onsubmit="return submitData()" method="post">
 
       <input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
       <input type="submit" id="btnsubmit" value="Start">
@@ -37,6 +38,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
     
   <script>
     var started=false;
+	var timer=null;
+	var maxminutes=1
+	var maxtimer=maxminutes*60000
     function submitData(){
 	if(started && heartData["bright"].length>300)
 		{
@@ -66,6 +70,16 @@ function reset(){
 hist = [];
 heartData={bright:[],time:[]}; 
 localStorage.setItem("heartData", "");
+timer_start();
+}
+function timer_start()
+{
+timer=Date.now();
+}
+function timer_stop()
+{
+submitData();	
+document.getElementById("mainform").submit();
 }
 
 function stop_reading()
@@ -123,7 +137,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
       })
         //alert('Turning on flashlight , if present ');
     }, 800); 
-    
+    timer_start();
     // Ready! Let's start drawing.
     requestAnimationFrame(draw);
   }
@@ -165,6 +179,12 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     hist.push({ bright : sum/len, time : Date.now() });
     heartData['bright'].push(sum/len);
     heartData['time'].push(Date.now());
+	if(Date.now()-timer>maxtimer)
+	{
+		timer_stop();
+		return 
+	}
+	document.getElementById("time_left").innerHTML="Time left "+((maxtimer-(Date.now()-timer))/60000).toFixed(2)+' Minutes'
 	//console.log(Math.max(...heartData['bright']),Math.min(...heartData['bright']));
 	try{
 	if(len>10 && (Math.max(...heartData['bright'])-Math.min(...heartData['bright']))>20)
