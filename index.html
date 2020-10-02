@@ -31,17 +31,23 @@ http://creativecommons.org/publicdomain/zero/1.0/
     <form action="http://vedicheart.pythonanywhere.com/"  onsubmit="return submitData()" method="post">
 
       <input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
-      <input type="submit" value="Submit">
+      <input type="submit" id="btnsubmit" value="Start">
     </form> 
     <p> Please maintain a calm posture and <b>do not move</b></p>
-    <p><a href="https://github.com/gfwilliams/HeartRate">Inspired by gfwilliams on GitHub</a></p>
-    <p>Also, check out <a href="http://www.puck-js.com/">Puck.js</a></p>
-  <script>
     
+  <script>
+    started=false;
     function submitData(){
-    document.getElementById("hdata").value=localStorage.getItem("heartData");
-    return true;
-    }
+	if(started)
+		{document.getElementById("hdata").value=localStorage.getItem("heartData");
+		return true;
+		}
+	else {
+	// Get the webcam's stream.
+    navigator.getUserMedia(constraints, startStream, function () {alert("camera permission is required for detecting heart rate "); });
+	return false;
+	}	
+	}
 var video, width, height, context, graphCanvas, graphContext, bpm;
 var hist = [];
 var heartData={bright:[],time:[]};    
@@ -84,11 +90,11 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     // The bpm meter
     bpm = document.getElementById("bpm");
     
-    // Get the webcam's stream.
-    navigator.getUserMedia(constraints, startStream, function () {});
+    
   }
 
   function startStream(stream) {
+	document.getElementById("btnsubmit").value="Submit";
     video.srcObject = stream;
     const track = stream.getVideoTracks()[0];
     setTimeout(function(){ 
@@ -96,7 +102,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
          advanced: [{torch: true}]
       })
         alert('Turning on flashlight , if present ');
-    }, 3000); 
+    }, 3); 
     video.play();
     // Ready! Let's start drawing.
     requestAnimationFrame(draw);
