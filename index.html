@@ -39,7 +39,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
     var started=false;
     function submitData(){
 	if(started)
-		{document.getElementById("hdata").value=localStorage.getItem("heartData");
+		{document.getElementById("hdata").value=JSON.stringify(heartData);
 		return true;
 		}
 	else {
@@ -166,7 +166,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     // Check browser support
     if (typeof(Storage) !== "undefined") {
       // Store
-      localStorage.setItem("heartData", JSON.stringify(heartData));
+      //localStorage.setItem("heartData", JSON.stringify(heartData));
       // Retrieve
       
     } else {
