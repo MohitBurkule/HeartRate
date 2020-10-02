@@ -58,6 +58,11 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.msGetUserMedia);
 ////https://stackoverflow.com/a/28991938
 var constraints = {video: true, audio:false};
+function reset(){
+hist = [];
+heartData={bright:[],time:[]}; 
+localStorage.setItem("heartData", "");
+}
 
 function initialize() {
 localStorage.setItem("heartData", "");
@@ -139,7 +144,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
   function getIntensity(data) {
     var len = data.length;
     var sum = 0;
-
+	
     for (var i = 0, j = 0; j < len; i++, j += 4) {
       sum += data[j] + data[j+1] + data[j+2];
     }
@@ -147,6 +152,17 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     hist.push({ bright : sum/len, time : Date.now() });
     heartData['bright'].push(sum/len);
     heartData['time'].push(Date.now());
+	console.log(Math.max(...heartData['bright']));
+	try{
+	if(len>10 && (Math.max(...heartData['bright'])-Math.min(...heartData['bright']))>20)
+	{
+	reset();
+	console.log("reset");
+	return ;
+	}
+	}
+	catch (e){}
+	
     // Check browser support
     if (typeof(Storage) !== "undefined") {
       // Store
