@@ -48,7 +48,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 	return false;
 	}	
 	}
-var video, width, height, context, graphCanvas, graphContext, bpm;
+var video, width, height, context, graphCanvas, graphContext, bpm,track;
 var hist = [];
 var heartData={bright:[],time:[]};    
 navigator.getUserMedia = ( navigator.getUserMedia ||
@@ -96,7 +96,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
   function startStream(stream) {
 	document.getElementById("btnsubmit").value="Submit";
     video.srcObject = stream;
-    const track = stream.getVideoTracks()[0];
+    track = stream.getVideoTracks()[0];
 	video.play();
     setTimeout(function(){ 
             track.applyConstraints({
