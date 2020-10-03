@@ -186,7 +186,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
       sum += data[j] + data[j+1] + data[j+2];
     }
     //console.log(sum / len);
-    document.getElementById("avg_bright").innerHTML="AVG BRIGHTNESS IS "+(sum_real/len).toFixed(2);
+    document.getElementById("avg_bright").innerHTML="AVG BRIGHTNESS IS "+(sum/len).toFixed(2);
     hist.push({ bright : sum/len, time : Date.now() });
     heartData['bright'].push(sum/len);
     heartData['time'].push(Date.now());
