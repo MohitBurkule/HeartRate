@@ -198,7 +198,7 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
 	document.getElementById("time_left").innerHTML="Time left "+((maxtimer-(Date.now()-timer))/60000).toFixed(2)+' Minutes'
 	//console.log(Math.max(...heartData['bright']),Math.min(...heartData['bright']));
 	try{
-	if(len>10 && (Math.max(...heartData['bright'])-Math.min(...heartData['bright']))>20)
+	if(len>10 && (Math.max(...heartData['bright'].slice(-300))-Math.min(...heartData['bright'].slice(-300)))>20)
 	{
 	reset();
 	console.log("reset");
