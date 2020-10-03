@@ -23,13 +23,13 @@ http://creativecommons.org/publicdomain/zero/1.0/
   <body>
     <p>Allow this website to use your webcam, then place your finger lightly over the camera and wait for the trace to stabilise.</p>
     <p>Put the tip of a finger carefully on the camera lens.Ensure that the camera image turns <b style="color:red;">red</b> </p>
-    <p>You will have most success when there is light behind your finger. Hence we will attempt to turn on flashlight on your device . It can get hot please <b>do not burn</b> yourself!!This website works best on Chrome </p>
+    <p>You will have most success when there is light behind your finger. Hence we will attempt to turn on flashlight on your device . It can get hot please <b>do not burn</b> yourself!! This website works best on Chrome </p>
     <video id="v" width="100" height="100"  muted></video><!--style="display:none"  uncomment for hiding video -->
-    <canvas id="c" width="100%" height="100" style="display:none"></canvas>
-    <canvas id="g" width="100%" height="100"></canvas><br/>
+    <canvas id="c" width="100" height="100" style="display:none"></canvas>
+    <canvas id="g" width="320" height="30"></canvas><br/>
     <div id="bpm">--</div>
-    <div id="time_left"></div>
-    <div id="avg_bright"></div>
+     <div id="time_left"></div>
+     <div id="avg_bright"></div>
     <form id="mainform" action="https://vedicheart.pythonanywhere.com/"  onsubmit="return submitData()" method="post">
 
       <input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
@@ -38,6 +38,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 	 1 <input type="radio" checked onclick="set_maxminutes(1);" name="timer" value="1">
 	 3 <input type="radio" onclick="set_maxminutes(3);" name="timer" value="3">
 	 5 <input type="radio" onclick="set_maxminutes(5);" name="timer" value="5">
+	    
     </form> 
     <p> Please maintain a calm posture and <b>do not move</b></p>
     
@@ -47,8 +48,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 	var maxminutes=1
 	var maxtimer=maxminutes*60000
 	function set_maxminutes(x){
-	maxminutes=x;
-	maxtimer=maxminutes*60000
+		maxminutes=x;
+		maxtimer=maxminutes*60000
 	}
     function submitData(){
 	if(started && heartData["bright"].length>300)
@@ -87,6 +88,7 @@ timer=Date.now();
 }
 function timer_stop()
 {
+submitData();	
 document.getElementById("mainform").submit();
 }
 
@@ -179,20 +181,13 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     var sum = 0;
 	if(stopped)
 		return 
-    var sumr=0;
-    var sumb=0;
-    var sumg=0;
-    var sum_real=0;
+		
     for (var i = 0, j = 0; j < len; i++, j += 4) {
-		sum += 0.5*data[j] + data[j+1] + data[j+2];//r g b a
-	    	sum_real += data[j] + data[j+1] + data[j+2];//r g b a
-		sumr+=data[j];
-		sumg+=data[j+1];
-		sumb+=data[j+2];
+      sum += data[j] + data[j+1] + data[j+2];
     }
-    //console.log(sum / len); 
-    document.getElementById("avg_bright").innerHTML="AVG BRIGHTNESS IS "+sum_real/len;	  
-    hist.push({ bright : sum/len, time : Date.now() , r:sumr/len, b:sumb/len , g:sumg/len});
+    //console.log(sum / len);
+    document.getElementById("avg_bright").innerHTML="AVG BRIGHTNESS IS "+(sum_real/len).toFixed(2);
+    hist.push({ bright : sum/len, time : Date.now() });
     heartData['bright'].push(sum/len);
     heartData['time'].push(Date.now());
 	if(Date.now()-timer>maxtimer)
@@ -236,68 +231,13 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     // draw
     var ctx = graphContext;
     ctx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
-	ctx.strokeStyle = "#000000";
     ctx.beginPath();
     ctx.moveTo(0,0);
     hist.forEach(function(v,x) {
       var y = graphCanvas.height*(v.bright-min)/(max-min);
-	  //console.log("bright is "+y);
       ctx.lineTo(x,y);
     });       
     ctx.stroke();
-	
-	//b
-	var maxb = hist[0].b;
-    var minb = hist[0].b;
-    hist.forEach(function(v) {
-      if (v.b>maxb) maxb=v.b;
-      if (v.b<minb) minb=v.b;
-    });
-	ctx.beginPath();
-	ctx.strokeStyle = "#0000FF";
-    ctx.moveTo(0,0);
-    hist.forEach(function(v,x) {
-      var y = (v.b/v.bright)*graphCanvas.height*(v.bright-min)/(max-min);
-	  //console.log("blue is "+y);
-      ctx.lineTo(x,y);
-    });       
-    ctx.stroke();
-	
-	//g
-	var maxg = hist[0].g;
-    var ming = hist[0].g;
-    hist.forEach(function(v) {
-      if (v.g>maxb) maxg=v.g;
-      if (v.g<minb) ming=v.g;
-    });
-	ctx.beginPath();
-	ctx.strokeStyle = "#00FF00";
-    ctx.moveTo(0,0);
-    hist.forEach(function(v,x) {
-      var y = (graphCanvas.height*(v.bright-min)/(max-min))*(v.g/v.bright);
-	  //console.log("green is "+y);
-      ctx.lineTo(x,y);
-    });       
-    ctx.stroke();
-	
-	//r
-	var maxr = hist[0].r;
-    var minr = hist[0].r;
-    hist.forEach(function(v) {
-      if (v.r>maxr) maxg=v.r;
-      if (v.r<minr) ming=v.r;
-    });
-	ctx.beginPath();
-	ctx.strokeStyle = "#FF0000";
-    ctx.moveTo(0,0);
-    hist.forEach(function(v,x) {
-      var y = (v.r/v.bright)*graphCanvas.height*(v.bright-min)/(max-min);
-	  //console.log("red is "+y);
-      ctx.lineTo(x,y);
-    });       
-    ctx.stroke();
-	
-	
     // work out bpm
     var isHi = undefined;
     var lastHi = undefined;
