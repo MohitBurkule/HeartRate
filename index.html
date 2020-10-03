@@ -183,10 +183,10 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
 	var sumg=0;
 	
     for (var i = 0, j = 0; j < len; i++, j += 4) {
-		sum += data[j] + data[j+1] + data[j+2];//
+		sum += data[j] + data[j+1] + data[j+2];//r g b a
 		sumr+=data[j];
-		sumb+=data[j+1];
-		sumg+=data[j+2];
+		sumg+=data[j+1];
+		sumb+=data[j+2];
     }
     //console.log(sum / len);   
     hist.push({ bright : sum/len, time : Date.now() , r:sumr/len, b:sumb/len , g:sumg/len});
