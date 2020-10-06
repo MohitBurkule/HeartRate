@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-10-06T07:55:16.591Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="oYJLH9tN4fs-6m0AKQCs" version="13.7.7" type="github">
+<mxfile host="app.diagrams.net" modified="2020-10-06T07:57:43.477Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36" etag="PRZ2AKw4w0lrkAZ_FYbw" version="13.7.7" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="908" dy="592" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -47,7 +47,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="WIyWlLk6GJQsqaUBKTNV-12" value="Reset Timer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-12" value="Reset Timer&lt;br&gt;Clear stored data&amp;nbsp;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="320" y="460" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="GkA0mrtPDaTk007Cy1ls-2" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
@@ -101,6 +101,12 @@
         </mxCell>
         <mxCell id="GkA0mrtPDaTk007Cy1ls-20" value="Submit data" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="485" y="460" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="GkA0mrtPDaTk007Cy1ls-23" value="Granted" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="215" y="250" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="GkA0mrtPDaTk007Cy1ls-24" value="Yes" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="275" y="560" width="30" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
