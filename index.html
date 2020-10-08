@@ -1,12 +1,11 @@
 <html>
-  <head>
+<head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCRH415DPW"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-LCRH415DPW');
 </script>
 <!---G tracking-->
@@ -16,105 +15,97 @@ Any copyright is dedicated to the Public Domain.
 http://creativecommons.org/publicdomain/zero/1.0/
 
 -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=320, initial-scale=1">
-    <title>Online Heart Rate Monitor</title>
-  </head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=320, initial-scale=1">
+<title>Online Heart Rate Monitor</title>
+</head>
   <body>
     <p>Allow this website to use your webcam, then place your finger lightly over the camera and wait for the trace to stabilise.</p>
     <p>Put the tip of a finger carefully on the camera lens.Ensure that the camera image turns <b style="color:red;">red</b> </p>
     <p>You will have most success when there is light behind your finger. Hence we will attempt to turn on flashlight on your device . It can get hot please <b>do not burn</b> yourself!! This website works best on Chrome </p>
-    <video id="v" width="100" height="100"  muted></video><!--style="display:none"  uncomment for hiding video -->
-    <canvas id="c" width="100" height="100" style="display:none"></canvas>
+    <video id="v" width="100" height="100"  muted></video> <!--style="display:none"  for hiding video -->
+    <canvas id="c" width="100" height="100" style="display:none"></canvas><!--for drawing video on canvas-->
     <canvas id="g" width="320" height="30"></canvas><br/>
-    <div id="bpm">--</div>
-     <div id="time_left"></div>
-     <div id="avg_bright"></div>
-    <form id="mainform" action="https://vedicheart.pythonanywhere.com/"  onsubmit="return submitData()" method="post">
-
-      <input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
-      <input type="submit" id="btnsubmit" value="Start">
-	<br>Set Measurement timer for <br>  
-	 1 <input type="radio" checked onclick="set_maxminutes(1);" name="timer" value="1">
-	 3 <input type="radio" onclick="set_maxminutes(3);" name="timer" value="3">
-	 5 <input type="radio" onclick="set_maxminutes(5);" name="timer" value="5">
-	    
+    
+	<div id="bpm">--</div>
+    <div id="time_left"></div>
+    <div id="avg_bright"></div>
+	
+    <form id="mainform" action="https://vedicheart.pythonanywhere.com/"   method="post">
+		<input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
+		<input type="button" id="btnsubmit" value="Start" onclick="startReading()">
+		<br>Set Measurement timer for <br>  
+		 1 <input type="radio" checked onclick="set_maxtimer(1);" name="timer" value="1">
+		 3 <input type="radio" onclick="set_maxtimer(3);" name="timer" value="3">
+		 5 <input type="radio" onclick="set_maxtimer(5);" name="timer" value="5">		
     </form> 
     <p> Please maintain a calm posture and <b>do not move</b></p>
     
   <script>
-    var started=false;
-	var timer=null;
-	var maxminutes=1
-	var maxtimer=maxminutes*60000
-	function set_maxminutes(x){
-		maxminutes=x;
-		maxtimer=maxminutes*60000
-	}
-    function submitData(){
-	if(started && heartData["bright"].length>300)
-		{
-		stop_reading();
-		document.getElementById("hdata").value=JSON.stringify(heartData);
-		return true;
-		}
-	else {
-		// Get the webcam's stream.// request user permission
-		
-		navigator.getUserMedia(constraints, startStream, function () {alert("camera permission is required for detecting heart rate "); });
-		return false;
-		}	
-	}
+var start_timer=null;
+var maxtimer=1*60000	
 var video, width,stopped, height, context, graphCanvas, graphContext, bpm,track,torchMaxRetry;
-torchMaxRetry=5;
-var hist = [];
-stopped=false;
-var heartData={bright:[],time:[]};    
+var torchMaxRetry=5;
+var hist = [];// older way of storing data [{bright:64,time:200},{bright:68,time:202},...] 
+var stopped=false;
+var heartData={bright:[],time:[]};// new way of storing data {bright:[64,68,..],time:[200,202,..]} 
 navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
                        navigator.mozGetUserMedia ||
                        navigator.msGetUserMedia);
-////https://stackoverflow.com/a/28991938
-var constraints = {video: true, audio:false};
+																	////https://stackoverflow.com/a/28991938
+var constraints = {video: true, audio:false};    
+
+function set_maxtimer(x){
+		maxtimer=x*60000// in milliseconds 
+	}
+	
+function startReading(){
+		// Get the webcam's stream.// request user permission
+		navigator.getUserMedia(constraints, startStream, function () {alert("camera permission is required for detecting heart rate "); });
+		return false;
+	}
+
 function reset(){
-hist = [];
-heartData={bright:[],time:[]}; 
-localStorage.setItem("heartData", "");
-timer_start();
+	hist = [];
+	heartData={bright:[],time:[]}; 
+	timer_start();
 }
+
 function timer_start()
 {
-timer=Date.now();
+	start_timer=Date.now();
 }
-function timer_stop()
-{
-submitData();	
-document.getElementById("mainform").submit();
+
+function submitData()
+{	
+	stop_reading();
+	document.getElementById("hdata").value=JSON.stringify(heartData);
+	document.getElementById("mainform").submit();
 }
 
 function stop_reading()
 {
-stopped=true;
-video.pause();
-bpm.innerHTML="Sending reading ... please stay on the page ";
+	stopped=true;
+	video.pause();
+	bpm.innerHTML="Sending reading ... please stay on the page ";
 }
 
 function initialize() {
-localStorage.setItem("heartData", "");
-navigator.mediaDevices.enumerateDevices().then(function(devices) {
-  devices.forEach(function(device) {
-    console.log(device.kind + ": " + device.label +
-                " id = " + device.deviceId/*, JSON.stringify(device,null,2)*/);
-    if (device.kind=="videoinput" /*&& constraints.video===true*/)
-      constraints.video = { optional: [{sourceId: device.deviceId}, { fillLightMode: "on" }] };
-  });
-  initialize2();
-}).catch(function(err) {
-  console.log(err.name + ": " + err.message);
-});
+	navigator.mediaDevices.enumerateDevices().then(function(devices) {
+	  devices.forEach(function(device) {
+		console.log(device.kind + ": " + device.label +
+					" id = " + device.deviceId/*, JSON.stringify(device,null,2)*/);
+		if (device.kind=="videoinput" /*&& constraints.video===true*/)
+		  constraints.video = { optional: [{sourceId: device.deviceId}, { fillLightMode: "on" }] };
+	  });
+	  initialize2();
+	}).catch(function(err) {
+	  console.log(err.name + ": " + err.message);
+	});
 }
 
-  function initialize2() {
+function initialize2() {
     // The source video.
     video = document.getElementById("v");
     width = video.width;
@@ -132,11 +123,11 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     bpm = document.getElementById("bpm");
     
     
-  }
+}
 
-  function startStream(stream) {
-	started=true;
-	document.getElementById("btnsubmit").value="Submit";
+function startStream(stream) {
+	document.getElementById("btnsubmit").style.visibility = 'hidden';
+
     video.srcObject = stream;
     track = stream.getVideoTracks()[0];
 	video.play();
@@ -147,22 +138,24 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
       })
         //alert('Turning on flashlight , if present ');
     }, 800); 
-    timer_start();
+    
+	timer_start();
+
     // Ready! Let's start drawing.
     requestAnimationFrame(draw);
   }
 
-  function draw() {
+function draw() {
     var frame = readFrame();
     if (frame) {
-      getIntensity(frame.data);      
+      store_and_draw(frame.data);      
     }
 
     // Wait for the next frame.
     requestAnimationFrame(draw);
-  }
+}
 
-  function readFrame() {
+function readFrame() {
     try {
       context.drawImage(video, 0, 0, width, height);
     } catch (e) {
@@ -174,48 +167,48 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
 		torchMaxRetry=torchMaxRetry-1;
 	}
     return context.getImageData(0, 0, width, height);
-  }
+}
 
-  function getIntensity(data) {
+function store_and_draw(data) {
     var len = data.length;
     var sum = 0;
-	if(stopped)
+	if(stopped)//if stoppped then do not compute 
 		return 
 		
     for (var i = 0, j = 0; j < len; i++, j += 4) {
-      sum += data[j] + data[j+1] + data[j+2];
+      sum += data[j] + data[j+1] + data[j+2]; // rgba 
     }
-    //console.log(sum / len);
     document.getElementById("avg_bright").innerHTML="AVG BRIGHTNESS IS "+(sum/len).toFixed(2);
+	
+	//store brightness and time 
     hist.push({ bright : sum/len, time : Date.now() });
     heartData['bright'].push(sum/len);
     heartData['time'].push(Date.now());
-	if(Date.now()-timer>maxtimer)
+	
+	if(Date.now()-start_timer>maxtimer)
 	{
-		timer_stop();
+		// if timeout then submit data
+		submitData();
 		return 
 	}
-	document.getElementById("time_left").innerHTML="Time left "+((maxtimer-(Date.now()-timer))/60000).toFixed(2)+' Minutes'
-	//console.log(Math.max(...heartData['bright']),Math.min(...heartData['bright']));
+	// else display time left 
+	document.getElementById("time_left").innerHTML="Time left "+((maxtimer-(Date.now()-start_timer))/60000).toFixed(2)+' Minutes'
+	
+	//detect impulse 
 	try{
-	if(len>10 && (Math.max(...heartData['bright'].slice(-300))-Math.min(...heartData['bright'].slice(-300)))>20)
-	{
-	reset();
-	console.log("reset");
-	return ;
-	}
+		if( (Math.max(...heartData['bright'].slice(-300))-Math.min(...heartData['bright'].slice(-300)))>20)
+		{
+		// if in last 300 values => max-min>20 then impulse present 
+			reset();
+			console.log("reset");
+			return ;
+		}
 	}
 	catch (e){}
 	
-    // Check browser support
-    if (typeof(Storage) !== "undefined") {
-      // Store
-      //localStorage.setItem("heartData", JSON.stringify(heartData));
-      // Retrieve
-      
-    } else {
-      document.alert("Sorry, your browser does not support Web Storage...Hence our site may not work");
-    }
+	
+	/////////// below code to display graph 
+	
     while (hist.length>graphCanvas.width) hist.shift();
     // max and min
     var max = hist[0].bright;
@@ -265,9 +258,9 @@ navigator.mediaDevices.enumerateDevices().then(function(devices) {
     } else {
       bpm.innerHTML = "-- BPM";
     }
-  }
+}
 
-  addEventListener("DOMContentLoaded", initialize);
+addEventListener("DOMContentLoaded", initialize);
   </script>
     <h3>Disclaimer</h3>
     This is an app which tries to determine your heart rate as best as it can, but it's not medical equipment.<br> Do not base any medical decisions solely on the results of this app.<br>Please contact a doctor when you are in need of medical advice or in an emergency .<br>
