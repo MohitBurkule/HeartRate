@@ -126,7 +126,7 @@ function initialize2() {
 }
 
 function startStream(stream) {
-	document.getElementById("btnsubmit").style.visibility = 'hidden';
+	document.getElementById("start_btn").style.visibility = 'hidden';
 	video.srcObject = stream;
 	track = stream.getVideoTracks()[0];
 	video.play();
