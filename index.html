@@ -33,7 +33,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 	
     <form id="mainform" action="https://vedicheart.pythonanywhere.com/"   method="post">
 		<input type="text" id="hdata" name="hdata" value="None" hidden ><br><br>
-		<input type="button" id="btnsubmit" value="Start" onclick="startReading()">
+		<input type="button" id="start_btn" value="Start" onclick="startReading()">
 		<br>Set Measurement timer for <br>  
 		 1 <input type="radio" checked onclick="set_maxtimer(1);" name="timer" value="1">
 		 3 <input type="radio" onclick="set_maxtimer(3);" name="timer" value="3">
@@ -58,13 +58,13 @@ var constraints = {video: true, audio:false};
 
 function set_maxtimer(x){
 		maxtimer=x*60000// in milliseconds 
-	}
+}
 	
 function startReading(){
 		// Get the webcam's stream.// request user permission
 		navigator.getUserMedia(constraints, startStream, function () {alert("camera permission is required for detecting heart rate "); });
 		return false;
-	}
+}
 
 function reset(){
 	hist = [];
@@ -127,17 +127,14 @@ function initialize2() {
 
 function startStream(stream) {
 	document.getElementById("btnsubmit").style.visibility = 'hidden';
-
-    video.srcObject = stream;
-    track = stream.getVideoTracks()[0];
+	video.srcObject = stream;
+	track = stream.getVideoTracks()[0];
 	video.play();
-    
+	
 	setTimeout(function(){ 
-            track.applyConstraints({
-         advanced: [{torch: true}]
-      })
+            track.applyConstraints({advanced: [{torch: true}]})
         //alert('Turning on flashlight , if present ');
-    }, 800); 
+    	}, 800); 
     
 	timer_start();
 
