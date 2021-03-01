@@ -55,7 +55,7 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.msGetUserMedia);
 																	////https://stackoverflow.com/a/28991938
 
-var constraints = { audio:false, video: { facingMode:"front"} };
+var constraints = { audio:false, video: { facingMode:"environment"} };
 
 function set_maxtimer(x){
 		maxtimer=x*60000// in milliseconds 
