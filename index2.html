@@ -17,7 +17,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=320, initial-scale=1">
-<title>Online Heart Rate Monitor</title>
+<title>Vedic Heart</title>
 </head>
   <body>
     <p>Allow this website to use your webcam, then place your finger lightly over the camera and wait for the trace to stabilise.</p>
@@ -54,7 +54,7 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.mozGetUserMedia ||
                        navigator.msGetUserMedia);
 																	////https://stackoverflow.com/a/28991938
-var constraints = {video: true, audio:false};    
+var constraints = {video: true, audio:false,    facingMode: {exact: 'environment'}};    
 
 function set_maxtimer(x){
 		maxtimer=x*60000// in milliseconds 
