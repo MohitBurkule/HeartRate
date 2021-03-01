@@ -20,7 +20,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 <title>Vedic Heart</title>
 </head>
   <body>
-    <p>Allow this website to use your webcam, then place your finger lightly over the camera and wait for the trace to stabilise.</p>
+    <p>Allow, this website to use your webcam, then place your finger lightly over the camera and wait for the trace to stabilise.</p>
     <p>Put the tip of a finger carefully on the camera lens.Ensure that the camera image turns <b style="color:red;">red</b> </p>
     <p>You will have most success when there is light behind your finger. Hence we will attempt to turn on flashlight on your device . It can get hot please <b>do not burn</b> yourself!! This website works best on Chrome </p>
     <video id="v" width="100" height="100"  muted></video> <!--style="display:none"  for hiding video -->
@@ -55,7 +55,7 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.msGetUserMedia);
 																	////https://stackoverflow.com/a/28991938
 
-var constraints = { audio:false, video: { facingMode:"environment"} };
+var constraints = { audio:false, video: { facingMode:"front"} };
 
 function set_maxtimer(x){
 		maxtimer=x*60000// in milliseconds 
