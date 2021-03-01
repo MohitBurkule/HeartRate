@@ -54,10 +54,8 @@ navigator.getUserMedia = ( navigator.getUserMedia ||
                        navigator.mozGetUserMedia ||
                        navigator.msGetUserMedia);
 																	////https://stackoverflow.com/a/28991938
-//var constraints = {video: true, audio:false,    facingMode: {exact: 'environment'}};    
-var front = false;
-document.getElementById('flip-button').onclick = function() { front = !front; };
-var constraints = { audio:false, video: { facingMode: (front? "user" : "environment") } };
+
+var constraints = { audio:false, video: { facingMode:"environment"} };
 
 function set_maxtimer(x){
 		maxtimer=x*60000// in milliseconds 
