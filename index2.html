@@ -36,14 +36,14 @@ http://creativecommons.org/publicdomain/zero/1.0/
 		<input type="button" id="start_btn" value="Start" onclick="startReading()">
 		<br>Set Measurement timer for <br>  
 		 <!-- 1 <input type="radio" checked onclick="set_maxtimer(1);" name="timer" value="1">-->
-		 2 <input type="radio" onclick="set_maxtimer(2);" name="timer" value="2">
+		 2 <input type="radio" onclick="set_maxtimer(2);" name="timer" checked value="2">
 		<!-- 5 <input type="radio" onclick="set_maxtimer(5);" name="timer" value="5">		-->
     </form> 
     <p> Please maintain a calm posture and <b>do not move</b></p>
     
   <script>
 var start_timer=null;
-var maxtimer=1*60000	
+var maxtimer=2*60000	
 var video, width,stopped, height, context, graphCanvas, graphContext, bpm,track,torchMaxRetry;
 var torchMaxRetry=5;
 var hist = [];// older way of storing data [{bright:64,time:200},{bright:68,time:202},...] 
